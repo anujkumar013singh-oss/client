@@ -1,11 +1,6 @@
 import express from "express"
-import mongoose from "mongoose"
 import cors from "cors"
 import dotenv from "dotenv"
-import contactRoutes from "./routes/contact.js"
-import searchRoutes from "./routes/search.js"
-import errorHandler from "./middleware/errorHandler.js"
-import Certificate from "./models/Certificate.js"
 
 dotenv.config()
 const app = express()
@@ -13,46 +8,110 @@ const app = express()
 app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5173" }))
 app.use(express.json())
 
-// Health check endpoint
-app.get("/", (req, res) => {
-  res.json({ status: "ok", message: "Server is running" })
-})
-
-app.get("/health", (req, res) => {
-  res.json({ status: "ok", mongoReady: global.mongoReady })
-})
-
-app.use("/api/contact", contactRoutes)
-app.use("/api/search", searchRoutes)
-app.use(errorHandler)
-
+// In-memory data storage
+const contacts = []
 const sampleCertificates = [
   { certNumber: "QAMS-ISO9001-2024-0001", orgName: "Precision Industries Ltd", standard: "ISO 9001:2015", address: "Noida, Uttar Pradesh", scope: "Manufacturing and supply of precision industrial components.", issuedOn: "2024-02-01", expireOn: "2027-01-31", status: "Active" },
   { certNumber: "QAMS-ISO45001-2024-0002", orgName: "Buildtech Construction", standard: "ISO 45001:2018", address: "Gurugram, Haryana", scope: "Construction project management and site safety systems.", issuedOn: "2024-04-15", expireOn: "2027-04-14", status: "Active" },
   { certNumber: "QAMS-ISO27001-2024-0003", orgName: "DataSecure Solutions", standard: "ISO 27001:2013", address: "Bengaluru, Karnataka", scope: "Information security management for software delivery operations.", issuedOn: "2024-06-10", expireOn: "2027-06-09", status: "Active" },
 ]
 
-async function connectMongo() {
-  const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI
-  if (!mongoUri) {
-    console.warn("MONGO_URI missing. API will use in-memory sample certificates for search demo.")
-    global.mongoReady = false
-    return
-  }
-  try {
-    await mongoose.connect(mongoUri)
-    global.mongoReady = true
-    await Certificate.bulkWrite(sampleCertificates.map((doc) => ({
-      updateOne: { filter: { certNumber: doc.certNumber }, update: { $setOnInsert: doc }, upsert: true },
-    })))
-    console.log("MongoDB Atlas connected")
-  } catch (err) {
-    global.mongoReady = false
-    console.error("MongoDB connection failed:", err.message)
-  }
-}
+// Health check endpoint
+app.get("/", (req, res) => {
+  res.json({ status: "ok", message: "Server is running" })
+})
 
-connectMongo()
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", message: "Server is healthy" })
+})
+
+// Contact form endpoint
+app.post("/api/contact", (req, res) => {
+  try {
+    const { name, email, phone, service, message } = req.body
+
+    // Validation
+    if (!name || name.trim().length < 2) {
+      return res.status(400).json({ success: false, error: "Name must be at least 2 characters" })
+    }
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ success: false, error: "Valid email is required" })
+    }
+
+    if (!message || message.trim().length < 20) {
+      return res.status(400).json({ success: false, error: "Message must be at least 20 characters" })
+    }
+
+    // Store contact
+    const contact = {
+      id: Date.now(),
+      name: name.trim(),
+      email: email.trim(),
+      phone: phone || null,
+      service: service || null,
+      message: message.trim(),
+      createdAt: new Date().toISOString(),
+      ipAddress: req.ip
+    }
+
+    contacts.push(contact)
+
+    res.status(201).json({
+      success: true,
+      message: "Thank you. We will be in touch within 24 hours.",
+      contactId: contact.id
+    })
+  } catch (err) {
+    console.error("Contact form error:", err.message)
+    res.status(500).json({ success: false, error: "Server error" })
+  }
+})
+
+// Search certificates endpoint
+app.get("/api/search", (req, res) => {
+  try {
+    const cert = String(req.query.certNumber || req.query.cert || "").trim()
+
+    if (!cert) {
+      return res.status(400).json({ success: false, error: "Certificate number is required" })
+    }
+
+    const certificate = sampleCertificates.find(
+      (item) => item.certNumber.toLowerCase() === cert.toLowerCase()
+    )
+
+    if (!certificate) {
+      return res.status(404).json({ found: false, error: "Certificate not found" })
+    }
+
+    res.json({ found: true, certificate })
+  } catch (err) {
+    console.error("Search error:", err.message)
+    res.status(500).json({ success: false, error: "Server error" })
+  }
+})
+
+// Get all certificates (for admin/testing)
+app.get("/api/certificates", (req, res) => {
+  res.json({ certificates: sampleCertificates })
+})
+
+// Get all contacts (for admin/testing)
+app.get("/api/contacts", (req, res) => {
+  res.json({ contacts: contacts, total: contacts.length })
+})
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error("Error:", err.message)
+  res.status(500).json({ success: false, error: "Internal server error" })
+})
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ success: false, error: "Route not found" })
+})
 
 const PORT = process.env.PORT || 5055
 

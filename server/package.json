@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Certificate management API",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
@@ -14,9 +14,7 @@
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
-    "express": "^4.22.1",
-    "express-validator": "^7.3.2",
-    "mongoose": "^8.23.1"
+    "express": "^4.22.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
