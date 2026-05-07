@@ -29,41 +29,43 @@ async function connectMongo() {
     global.mongoReady = false
     return
   }
-  await mongoose.connect(mongoUri)
-  global.mongoReady = true
-  await Certificate.bulkWrite(sampleCertificates.map((doc) => ({
-    updateOne: { filter: { certNumber: doc.certNumber }, update: { $setOnInsert: doc }, upsert: true },
-  })))
-  console.log("MongoDB Atlas connected")
+  try {
+    await mongoose.connect(mongoUri)
+    global.mongoReady = true
+    await Certificate.bulkWrite(sampleCertificates.map((doc) => ({
+      updateOne: { filter: { certNumber: doc.certNumber }, update: { $setOnInsert: doc }, upsert: true },
+    })))
+    console.log("MongoDB Atlas connected")
+  } catch (err) {
+    global.mongoReady = false
+    console.error("MongoDB connection failed:", err.message)
+  }
 }
 
-connectMongo().catch((err) => {
-  global.mongoReady = false
-  console.error("MongoDB connection failed:", err.message)
-})
+connectMongo()
 
 const PORT = process.env.PORT || 5055
 
 const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+  console.log(`Server running on port ${PORT}`)
+})
 
 server.on("error", (err) => {
   if (err.code === "EADDRINUSE") {
-    console.error(`Port ${PORT} is already in use. Please stop the other process or use a different port.`);
-    process.exit(1);
+    console.error(`Port ${PORT} is already in use. Please stop the other process or use a different port.`)
+    process.exit(1)
   } else {
-    console.error("Server error:", err.message);
-    process.exit(1);
+    console.error("Server error:", err.message)
+    process.exit(1)
   }
-});
+})
 
 process.on("unhandledRejection", (reason, promise) => {
-  console.error("Unhandled Rejection at:", promise, "reason:", reason);
-  process.exit(1);
-});
+  console.error("Unhandled Rejection at:", promise, "reason:", reason)
+  process.exit(1)
+})
 
 process.on("uncaughtException", (error) => {
-  console.error("Uncaught Exception:", error);
-  process.exit(1);
-});
+  console.error("Uncaught Exception:", error)
+  process.exit(1)
+})
