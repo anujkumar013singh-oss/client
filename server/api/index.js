@@ -114,28 +114,4 @@ app.use((req, res) => {
   res.status(404).json({ success: false, error: "Route not found" })
 })
 
-const PORT = process.env.PORT || 5055
-
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
-
-server.on("error", (err) => {
-  if (err.code === "EADDRINUSE") {
-    console.error(`Port ${PORT} is already in use. Please stop the other process or use a different port.`)
-    process.exit(1)
-  } else {
-    console.error("Server error:", err.message)
-    process.exit(1)
-  }
-})
-
-process.on("unhandledRejection", (reason, promise) => {
-  console.error("Unhandled Rejection at:", promise, "reason:", reason)
-  process.exit(1)
-})
-
-process.on("uncaughtException", (error) => {
-  console.error("Uncaught Exception:", error)
-  process.exit(1)
-})
+export default app
