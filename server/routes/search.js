@@ -11,14 +11,29 @@ const fallbackCertificates = [
 
 router.get("/", async (req, res, next) => {
   try {
-    const cert = String(req.query.cert || "").trim()
-    if (!cert) return res.status(400).json({ success: false, error: "Certificate number is required" })
-    let certificate = null
-    if (global.mongoReady) {
-      certificate = await Certificate.findOne({ certNumber: new RegExp(`^${cert.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i") }).lean()
+    const cert = String(req.query.certNumber || req.query.cert || "").trim()
+    if (!cert) {
+      return res.status(400).json({ success: false, error: "Certificate number is required" })
     }
+
+    let certificate = null
+
+    if (global.mongoReady) {
+      try {
+        certificate = await Certificate.findOne({
+          certNumber: new RegExp(`^${cert.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "i")
+        }).lean()
+      } catch (dbErr) {
+        console.error("Database query error:", dbErr.message)
+      }
+    }
+
     certificate ||= fallbackCertificates.find((item) => item.certNumber.toLowerCase() === cert.toLowerCase())
-    if (!certificate) return res.status(404).json({ found: false })
+
+    if (!certificate) {
+      return res.status(404).json({ found: false, error: "Certificate not found" })
+    }
+
     res.json({ found: true, certificate })
   } catch (err) {
     next(err)

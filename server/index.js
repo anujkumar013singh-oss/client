@@ -12,6 +12,16 @@ const app = express()
 
 app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5173" }))
 app.use(express.json())
+
+// Health check endpoint
+app.get("/", (req, res) => {
+  res.json({ status: "ok", message: "Server is running" })
+})
+
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", mongoReady: global.mongoReady })
+})
+
 app.use("/api/contact", contactRoutes)
 app.use("/api/search", searchRoutes)
 app.use(errorHandler)
