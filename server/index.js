@@ -42,36 +42,13 @@ connectMongo().catch((err) => {
   console.error("MongoDB connection failed:", err.message)
 })
 
-// Function to find an available port
-async function findAvailablePort(startPort) {
-  const net = await import('net')
-  return new Promise((resolve, reject) => {
-    const server = net.createServer()
-    server.listen(startPort, () => {
-      server.once('close', () => {
-        resolve(startPort)
-      })
-      server.close()
-    })
-    server.on('error', (err) => {
-      if (err.code === 'EADDRINUSE') {
-        server.close()
-        findAvailablePort(startPort + 1).then(resolve).catch(reject)
-      } else {
-        reject(err)
-      }
-    })
-  })
-}
-
-// Start server with port conflict handling
-const startPort = parseInt(process.env.PORT) || 5055
-
-findAvailablePort(startPort)
-  .then((port) => {
-    app.listen(port, () => console.log(`Server running on port ${port}`))
-  })
-  .catch((err) => {
-    console.error('Failed to start server:', err.message)
+const PORT = process.env.PORT || 5055
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`)).on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use. Please stop the other process or use a different port.`)
     process.exit(1)
-  })
+  } else {
+    console.error('Server error:', err.message)
+    process.exit(1)
+  }
+})
