@@ -1,190 +1,131 @@
-# QAMS Global - ISO Certification Website
+# QAMS Global - Certificate Management UI
 
-A modern, responsive website for QAMS Global, an ISO certification, audit, and training body.
+A modern, responsive frontend application for QAMS Global certificate management and verification.
 
 ## 🚀 Features
 
-- **Hero Section**: Animated image slider with expert avatars
-- **Navigation**: Responsive navbar with mobile drawer
-- **Mission Section**: Animated text with company values
-- **Contact Form**: Full-featured form with MongoDB integration
-- **Certificate Search**: Live search for ISO certifications
-- **Modern Design**: Built with React, TailwindCSS, and Framer Motion
+- **Certificate Search** - Search and verify certificates with sample data
+- **Contact Form** - Beautiful contact form with validation
+- **Responsive Design** - Works on all devices
+- **Smooth Animations** - Framer Motion animations throughout
+- **Modern UI** - Built with React, Tailwind CSS, and Vite
 
-## 🛠️ Tech Stack
+## 📋 Tech Stack
 
-### Frontend
-- **React 18** - UI framework
-- **Vite** - Build tool and dev server
-- **TailwindCSS** - Styling framework
+- **React 19** - UI framework
+- **Vite** - Build tool
+- **Tailwind CSS** - Styling
 - **Framer Motion** - Animations
 - **GSAP** - Advanced animations
-- **Swiper** - Image carousel
-- **Lucide React** - Icons
+- **Lenis** - Smooth scrolling
 
-### Backend
-- **Node.js** - Runtime
-- **Express** - Web framework
-- **MongoDB Atlas** - Database
-- **Mongoose** - ODM
-- **Nodemailer** - Email service
-- **Express Validator** - Input validation
+## 🛠️ Installation
 
-## 📦 Installation
-
-### Prerequisites
-- Node.js 18+
-- npm or yarn
-- MongoDB Atlas account
-
-### Local Development
-
-1. **Clone the repository**
 ```bash
-git clone <repository-url>
-cd test-2
-```
-
-2. **Install dependencies**
-```bash
-# Frontend
 cd client
 npm install
-
-# Backend
-cd ../server
-npm install
 ```
 
-3. **Set up environment variables**
+## 💻 Development
 
-**Backend (.env)**
-```env
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/db
-CLIENT_URL=http://localhost:5173
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASS=your-app-password
-EMAIL_SERVICE=gmail
-PORT=5055
-```
-
-**Frontend (.env)**
-```env
-VITE_API_URL=http://localhost:5055
-```
-
-4. **Start development servers**
 ```bash
-# Backend (terminal 1)
-cd server
-npm run dev
-
-# Frontend (terminal 2)
 cd client
 npm run dev
 ```
 
-5. **Access the application**
-- Frontend: http://localhost:5173
-- Backend: http://localhost:5055
+Server runs at `http://localhost:5173`
 
-## 🌐 Deployment
+## 🏗️ Build
 
-### Frontend (Vercel)
 ```bash
 cd client
-vercel --prod
+npm run build
 ```
 
-### Backend (Render/Railway)
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
+Output is in `client/dist`
+
+## 📦 Deployment
+
+### Vercel
+
+1. Connect your GitHub repository to Vercel
+2. Set root directory to `client`
+3. Build command: `npm run build`
+4. Output directory: `dist`
+5. Deploy!
+
+### Netlify
+
+1. Connect your GitHub repository to Netlify
+2. Set base directory to `client`
+3. Build command: `npm run build`
+4. Publish directory: `dist`
+5. Deploy!
 
 ## 📁 Project Structure
 
 ```
-test-2/
-├── client/                 # React frontend
-│   ├── src/
-│   │   ├── components/     # React components
-│   │   ├── hooks/         # Custom hooks
-│   │   ├── styles/        # Global styles
-│   │   └── utils/         # Utility functions
-│   ├── public/           # Static assets
-│   └── package.json
-├── server/                # Node.js backend
-│   ├── models/           # Mongoose models
-│   ├── routes/           # API routes
-│   ├── middleware/       # Express middleware
-│   └── package.json
-├── DEPLOYMENT.md         # Deployment guide
-└── README.md
+client/
+├── src/
+│   ├── components/
+│   │   ├── layout/      # Navbar, Footer
+│   │   ├── sections/    # Page sections
+│   │   └── ui/          # Reusable UI components
+│   ├── hooks/           # Custom React hooks
+│   ├── styles/          # Global styles
+│   ├── utils/           # Utility functions
+│   ├── context/         # React context
+│   ├── App.jsx          # Main app component
+│   └── main.jsx         # Entry point
+├── public/              # Static assets
+├── index.html           # HTML template
+├── vite.config.js       # Vite configuration
+├── tailwind.config.js   # Tailwind configuration
+└── package.json         # Dependencies
 ```
 
-## 🔧 Configuration
+## 🎨 Components
 
-### Fonts Used
-- **Bebas Neue** - Logo branding
-- **Sen** - navigation items (secondary)
-- **Josefin Sans** - mission text
-- **Poppins** - primary font family
-
-### Color Scheme
-- **Navy** (#0C2340) - primary background
-- **Gold** (#D4A017) - accent color
-- **Blue** (#2563A8) - secondary color
-
-## 📧 Contact Form Features
-
-- **Validation**: Name, email, message validation
-- **Database Storage**: MongoDB Atlas integration
-- **Email Notifications**: Gmail SMTP integration
-- **Rate Limiting**: IP-based tracking
-- **Responsive Design**: Mobile-friendly layout
+### Sections
+- **HeroSlider** - Hero section with slider
+- **TrustBar** - Trust indicators
+- **StatsSection** - Statistics display
+- **ServicesSection** - Services overview
+- **HowItWorks** - Process explanation
+- **CertificationsSection** - Certifications display
+- **IndustriesGrid** - Industries served
+- **AboutSection** - About company
+- **MissionSection** - Mission statement
+- **SearchCertificate** - Certificate search (with sample data)
+- **Testimonials** - Customer testimonials
+- **FAQSection** - Frequently asked questions
+- **PolicySection** - Policies
+- **CTABanner** - Call to action
+- **ContactSection** - Contact form (no backend)
 
 ## 🔍 Certificate Search
 
-- **Live Search**: Real-time filtering
-- **MongoDB Integration**: Stored and queried from Atlas
-- **Fallback Data**: Sample data for development
-- **Responsive Results**: Mobile-optimized display
+The certificate search uses sample data:
+- `QAMS-ISO9001-2024-0001` - Precision Industries Ltd
+- `QAMS-ISO45001-2024-0002` - Buildtech Construction
+- `QAMS-ISO27001-2024-0003` - DataSecure Solutions
 
-## 🎨 Animations
+## 📝 Contact Form
 
-- **GSAP Text Animations**: Hero section word animations
-- **Framer Motion**: Page transitions and micro-interactions
-- **CSS Transitions**: Smooth hover states
-- **Swiper Effects**: Image carousel transitions
+The contact form validates input and shows a success message. No backend integration.
 
-## 🛡️ Security Features
+## 🎯 Environment Variables
 
-- **CORS Protection**: Configured for production domains
-- **Input Validation**: Express-validator integration
-- **XSS Protection**: Security headers
-- **Environment Variables**: Sensitive data protection
-
-## 📊 Performance
-
-- **Vite Build**: Optimized production builds
-- **Image Optimization**: Responsive images
-- **Code Splitting**: Lazy loading components
-- **CDN Ready**: Static asset optimization
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+No environment variables needed for frontend-only deployment.
 
 ## 📄 License
 
-This project is licensed under the ISC License.
+ISC
 
-## 📞 Support
+## 👨‍💻 Author
 
-For deployment issues or questions, refer to the [DEPLOYMENT.md](./DEPLOYMENT.md) guide or contact the development team.
+QAMS Global
 
 ---
 
-**QAMS Global** - Your trusted partner for ISO certification excellence.
+**Frontend Only** - No backend API required. All data is static/sample data.
