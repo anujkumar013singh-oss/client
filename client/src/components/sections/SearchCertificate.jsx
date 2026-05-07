@@ -18,26 +18,27 @@ export function SearchCertificate() {
   const [result, setResult] = useState(null)
   const { scrollTo } = useLenis()
 
-  const search = (e) => {
+  const search = async (e) => {
     e.preventDefault()
     if (!cert.trim()) return
 
     setState("loading")
     setResult(null)
 
-    // Simulate API delay
-    setTimeout(() => {
-      const found = sampleCertificates.find(
-        (item) => item.certNumber.toLowerCase() === cert.trim().toLowerCase()
-      )
+    try {
+      const response = await fetch(`/api/search?cert=${encodeURIComponent(cert.trim())}`)
+      const data = await response.json()
 
-      if (found) {
-        setResult(found)
+      if (data.found) {
+        setResult(data.certificate)
         setState("found")
       } else {
         setState("notfound")
       }
-    }, 500)
+    } catch (error) {
+      console.error("Search error:", error)
+      setState("notfound")
+    }
   }
 
   const rows = result

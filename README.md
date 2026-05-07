@@ -1,21 +1,23 @@
-# QAMS Global - Certificate Management UI
+# QAMS Global - Certificate Management Website
 
-A modern, responsive frontend application for QAMS Global certificate management and verification. Built with React, Vite, and Tailwind CSS.
+A modern, responsive full-stack website for QAMS Global certificate management and verification. Built with React, Vite, Tailwind CSS, and Vercel Serverless Functions.
 
 ## 🌟 Features
 
-- **Certificate Search** - Search and verify certificates with sample data
+- **Certificate Search** - Search and verify certificates instantly
 - **Contact Form** - Beautiful contact form with validation
 - **Responsive Design** - Works perfectly on all devices
 - **Smooth Animations** - Framer Motion and GSAP animations
 - **Modern UI** - Clean, professional design with Tailwind CSS
-- **Fast Performance** - Built with Vite for optimal speed
+- **Fast Performance** - Built with Vite and Vercel serverless functions
+- **Single Platform Deployment** - Deployed entirely on Vercel
 
 ## 🛠️ Tech Stack
 
 - **React 19** - UI framework
 - **Vite** - Build tool and dev server
 - **Tailwind CSS** - Utility-first CSS framework
+- **Vercel Serverless Functions** - API endpoints
 - **Framer Motion** - Animation library
 - **GSAP** - Advanced animations
 - **Lenis** - Smooth scrolling
@@ -36,9 +38,13 @@ client/
 │   ├── context/             # React context
 │   ├── App.jsx              # Main app component
 │   └── main.jsx             # Entry point
+├── api/                     # Vercel serverless functions
+│   ├── contact.js           # Contact form API
+│   └── search.js            # Certificate search API
 ├── public/                  # Static assets
 ├── index.html               # HTML template
 ├── vite.config.js           # Vite configuration
+├── vercel.json              # Vercel deployment config
 ├── tailwind.config.js       # Tailwind configuration
 └── package.json             # Dependencies
 ```

@@ -25,22 +25,37 @@ export function ContactSection() {
     return !Object.keys(e).length
   }
 
-  const submit = (ev) => {
+  const submit = async (ev) => {
     ev.preventDefault()
     if (!validate()) return
 
     setStatus("loading")
 
-    // Simulate form submission
-    setTimeout(() => {
-      console.log("Form submitted:", form)
-      setStatus("success")
-      // Reset form after 3 seconds
-      setTimeout(() => {
-        setForm({ name: "", email: "", phone: "", company: "", service: "Certification", message: "" })
-        setStatus("idle")
-      }, 3000)
-    }, 1000)
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        setStatus("success")
+        // Reset form after 3 seconds
+        setTimeout(() => {
+          setForm({ name: "", email: "", phone: "", company: "", service: "Certification", message: "" })
+          setStatus("idle")
+        }, 3000)
+      } else {
+        setStatus("error")
+      }
+    } catch (error) {
+      console.error("Form submission error:", error)
+      setStatus("error")
+    }
   }
 
   const set = (key, value) => setForm((f) => ({ ...f, [key]: value }))
