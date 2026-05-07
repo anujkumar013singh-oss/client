@@ -17,7 +17,7 @@ export function SearchCertificate() {
     setState("loading")
     setResult(null)
     try {
-      const { data } = await api.get(`/search?cert=${encodeURIComponent(cert.trim())}`)
+      const { data } = await api.get(`/api/search?cert=${encodeURIComponent(cert.trim())}`)
       if (data?.found === false) setState("notfound")
       else {
         setResult(data.certificate || data)

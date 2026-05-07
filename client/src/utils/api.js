@@ -22,8 +22,8 @@ export const apiDirect = {
     }
   },
   search: {
-    certificates: async (query) => {
-      const response = await fetch(`${API_BASE_URL}/api/search?query=${encodeURIComponent(query)}`)
+    certificates: async (cert) => {
+      const response = await fetch(`${API_BASE_URL}/api/search?cert=${encodeURIComponent(cert)}`)
       return response.json()
     }
   }
