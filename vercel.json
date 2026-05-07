@@ -1,13 +1,11 @@
 {
   "version": 2,
-  "buildCommand": "npm install",
+  "buildCommand": "npm run build",
   "outputDirectory": "client/dist",
   "framework": "vite",
   "functions": {
     "server/api/handler.js": {
-      "runtime": "nodejs18.x",
-      "memory": 1024,
-      "maxDuration": 60
+      "runtime": "nodejs18.x"
     }
   },
   "routes": [
@@ -19,8 +17,5 @@
       "src": "/(.*)",
       "dest": "client/dist/index.html"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }

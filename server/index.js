@@ -104,38 +104,44 @@ app.get("/api/contacts", (req, res) => {
 })
 
 // Error handling middleware
-app.use((err, req, res, next) => {
+app.use((err, res) => {
   console.error("Error:", err.message)
   res.status(500).json({ success: false, error: "Internal server error" })
 })
 
 // 404 handler
-app.use((req, res) => {
+app.use((_, res) => {
   res.status(404).json({ success: false, error: "Route not found" })
 })
 
-const PORT = process.env.PORT || 5055
+// Export for serverless platforms
+export default app
 
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+// Local development server
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 5055
 
-server.on("error", (err) => {
-  if (err.code === "EADDRINUSE") {
-    console.error(`Port ${PORT} is already in use. Please stop the other process or use a different port.`)
+  const server = app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+  })
+
+  server.on("error", (err) => {
+    if (err.code === "EADDRINUSE") {
+      console.error(`Port ${PORT} is already in use. Please stop the other process or use a different port.`)
+      process.exit(1)
+    } else {
+      console.error("Server error:", err.message)
+      process.exit(1)
+    }
+  })
+
+  process.on("unhandledRejection", (reason) => {
+    console.error("Unhandled Rejection:", reason)
     process.exit(1)
-  } else {
-    console.error("Server error:", err.message)
+  })
+
+  process.on("uncaughtException", (error) => {
+    console.error("Uncaught Exception:", error)
     process.exit(1)
-  }
-})
-
-process.on("unhandledRejection", (reason, promise) => {
-  console.error("Unhandled Rejection at:", promise, "reason:", reason)
-  process.exit(1)
-})
-
-process.on("uncaughtException", (error) => {
-  console.error("Uncaught Exception:", error)
-  process.exit(1)
-})
+  })
+}
