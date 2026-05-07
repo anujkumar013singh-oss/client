@@ -1,7 +1,7 @@
-# QAMS Global Website - Vercel Serverless Deployment Guide
+# QAMS Global Website - Netlify Deployment Guide
 
 ## Overview
-The QAMS Global website is now deployed using Vercel with serverless functions for API endpoints. This architecture provides:
+The QAMS Global website is deployed using Netlify with serverless functions for API endpoints. This architecture provides:
 - Single platform deployment (no separate backend server)
 - Automatic scaling
 - Zero configuration for API routes
@@ -10,23 +10,22 @@ The QAMS Global website is now deployed using Vercel with serverless functions f
 
 ## Architecture
 - **Frontend:** React + Vite + TailwindCSS
-- **API:** Vercel Serverless Functions (Node.js)
+- **API:** Netlify Serverless Functions (Node.js)
 - **Database:** Optional (currently using in-memory data)
-- **Deployment:** Vercel (single platform)
+- **Deployment:** Netlify (single platform)
 
 ## Deployment Steps
 
-### 1. Connect to Vercel
-1. Go to [vercel.com](https://vercel.com) and sign in/up
-2. Click "Add New Project"
-3. Import from GitHub: `https://github.com/anujkumar013singh-oss/client.git`
+### 1. Connect to Netlify
+1. Go to [netlify.com](https://netlify.com) and sign in/up
+2. Click "Add new site" → "Import an existing project"
+3. Select GitHub and authorize
+4. Choose your repository: `https://github.com/anujkumar013singh-oss/client.git`
 
 ### 2. Configure Project
-- **Framework Preset:** Vite
-- **Root Directory:** `./client`
-- **Build Command:** `npm run build`
-- **Output Directory:** `dist`
-- **Install Command:** `npm install`
+- **Build Command:** `cd client && npm run build`
+- **Publish Directory:** `client/dist`
+- **Node Version:** 18
 
 ### 3. Environment Variables
 No environment variables required for basic deployment.
@@ -36,7 +35,7 @@ Optional variables (if adding database):
 - `API_KEY` - For external API integrations
 
 ### 4. Deploy
-Click "Deploy" and wait for the build to complete.
+Click "Deploy site" and wait for the build to complete.
 
 ## Serverless Functions
 
@@ -74,57 +73,57 @@ To add a database for storing contact submissions:
 ### MongoDB Atlas Integration
 1. Create a MongoDB Atlas account
 2. Create a cluster and database
-3. Add connection string to Vercel environment variables:
+3. Add connection string to Netlify environment variables:
    ```
    DATABASE_URL=mongodb+srv://username:password@cluster.mongodb.net/database
    ```
 4. Update `api/contact.js` to save submissions to MongoDB
 
-### Vercel Postgres Integration
-1. Enable Postgres in Vercel project settings
+### Netlify Postgres Integration
+1. Enable Postgres in Netlify project settings
 2. Use the connection string provided
 3. Update serverless functions to connect to Postgres
 
 ## Monitoring and Analytics
 
-- **Vercel Dashboard:** View deployment logs, errors, and performance
+- **Netlify Dashboard:** View deployment logs, errors, and performance
 - **Analytics:** Built-in analytics for page views and API calls
-- **Logs:** Serverless function logs available in Vercel dashboard
+- **Logs:** Serverless function logs available in Netlify dashboard
 
 ## Troubleshooting
 
 ### Serverless Functions Not Working
-- Ensure functions are in `client/api/` directory
+- Ensure functions are in `api/` directory
 - Check file names match endpoint paths (e.g., `contact.js` → `/api/contact`)
-- Verify Vercel configuration in `vercel.json`
+- Verify Netlify configuration in `netlify.toml`
 
 ### Build Errors
 - Check Node.js version compatibility
 - Ensure all dependencies are in `package.json`
-- Review build logs in Vercel dashboard
+- Review build logs in Netlify dashboard
 
 ### API Timeout
 - Serverless functions have a 10-second timeout limit
 - Optimize database queries
-- Consider using Vercel Edge Functions for faster responses
+- Consider using Netlify Edge Functions for faster responses
 
 ## Security Considerations
 
 - All API routes are serverless (no direct server access)
-- Vercel handles HTTPS automatically
-- Rate limiting available through Vercel
+- Netlify handles HTTPS automatically
+- Rate limiting available through Netlify
 - Add authentication to API endpoints as needed
 
 ## Performance Optimization
 
-- Vercel automatically caches static assets
+- Netlify automatically caches static assets
 - Serverless functions scale automatically
 - Consider edge functions for global performance
-- Use Vercel Image Optimization for images
+- Use Netlify Image Optimization for images
 
 ## Cost
 
-- **Vercel Free Tier:** 
+- **Netlify Free Tier:** 
   - 100GB bandwidth per month
   - Unlimited deployments
   - Serverless functions included
@@ -132,6 +131,6 @@ To add a database for storing contact submissions:
 
 ## Support
 
-- **Vercel Documentation:** [vercel.com/docs](https://vercel.com/docs)
+- **Netlify Documentation:** [docs.netlify.com](https://docs.netlify.com)
 - **GitHub Issues:** Report issues in the repository
-- **Vercel Support:** Available for paid plans
+- **Netlify Support:** Available for paid plans
