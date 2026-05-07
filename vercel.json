@@ -4,6 +4,7 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "vite",
+  "rootDirectory": "client",
   "functions": {
     "api/**/*.js": {
       "runtime": "nodejs20.x"
